@@ -183,25 +183,17 @@
         <table>
           <thead><tr><th>Attendance</th><th>Students</th><th>Visitors</th><th>Total</th></tr></thead>
           <tbody id="attBody"></tbody>
-          <tfoot><tr><td>Classes total</td><td id="tS">0</td><td id="tV">0</td><td id="tA">0</td></tr></tfoot>
+          <tfoot><tr><td>Total attendance</td><td id="tS">0</td><td id="tV">0</td><td id="tA">0</td></tr></tfoot>
         </table>
       </div>
       <div class="tbl-wrap" style="margin-top:16px">
         <table>
           <thead><tr><th>Offering</th><th>Cash (₦)</th><th>Transfer (₦)</th></tr></thead>
           <tbody id="offBody"></tbody>
-          <tfoot><tr><td>Classes total</td><td id="tC">₦0.00</td><td id="tT">₦0.00</td></tr></tfoot>
+          <tfoot><tr><td>Total offering</td><td id="tC">₦0.00</td><td id="tT">₦0.00</td></tr></tfoot>
         </table>
       </div>
-      <div class="grp">Workers</div>
-      <div class="grand">
-        <div class="g wk"><span>Workers attendance</span><b id="wA">0</b></div>
-        <div class="g"><span>Offering · cash</span><b id="wC">₦0.00</b></div>
-        <div class="g"><span>Offering · transfer</span><b id="wT">₦0.00</b></div>
-        <div class="g wk"><span>Workers offering</span><b id="wO">₦0.00</b></div>
-      </div>
-      <div class="grp">Overall total (classes + workers)</div>
-      <div class="grand">
+      <div class="grand" style="margin-top:16px">
         <div class="g att"><span>Total attendance</span><b id="gA">0</b></div>
         <div class="g"><span>Offering · cash</span><b id="gC">₦0.00</b></div>
         <div class="g"><span>Offering · transfer</span><b id="gT">₦0.00</b></div>
@@ -227,7 +219,6 @@
       <div><span>Recorder</span><b id="mName"></b></div>
       <div><span>Sunday</span><b id="mDate"></b></div>
     </div>
-    <div class="wkline" id="mWk"></div>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Class</th><th>Students + Visitors</th><th>Cash / Transfer (₦)</th></tr></thead>
@@ -235,15 +226,7 @@
         <tfoot id="mFoot"></tfoot>
       </table>
     </div>
-    <div class="grp">Workers</div>
-    <div class="grand">
-      <div class="g wk"><span>Attendance</span><b id="mwA"></b></div>
-      <div class="g"><span>Cash</span><b id="mwC"></b></div>
-      <div class="g"><span>Transfer</span><b id="mwT"></b></div>
-      <div class="g wk"><span>Total offering</span><b id="mwO"></b></div>
-    </div>
-    <div class="grp">Overall total (classes + workers)</div>
-    <div class="grand">
+    <div class="grand" style="margin-top:12px">
       <div class="g att"><span>Total attendance</span><b id="mA"></b></div>
       <div class="g"><span>Cash</span><b id="mC"></b></div>
       <div class="g"><span>Transfer</span><b id="mT"></b></div>
@@ -313,7 +296,8 @@ const ALL = [];
     html += `<div><label for="wk_${f.key}">${f.label}</label>${f.money ? `<div class="money">${inp}</div>` : inp}</div>`;
   });
   html += `</div></div></div></section>`;
-  let att = "", off = "";
+  let att = `<tr class="dept"><td colspan="4">Workers</td></tr><tr><td>Workers</td><td>–</td><td>–</td><td class="tot" id="wk_aT">0</td></tr>`;
+  let off = `<tr class="dept"><td colspan="3">Workers</td></tr><tr><td>Workers</td><td id="wk_oC">₦0.00</td><td id="wk_oT">₦0.00</td></tr>`;
   DEPARTMENTS.forEach((dep, di) => {
     html += `<section class="card"><div class="card-h ${di % 2 ? "blue" : "red"}">${esc(dep.name)}<small>${dep.classes.length} classes</small></div><div class="card-b">`;
     att += `<tr class="dept"><td colspan="4">${esc(dep.name)}</td></tr>`;
@@ -434,10 +418,10 @@ let last = null;
 function refresh() {
   last = collect();
   const { T, W, missing, invalid } = last;
-  $("wA").textContent = intf(W.attendance); $("wC").textContent = naira(W.cash); $("wT").textContent = naira(W.transfer); $("wO").textContent = naira(W.cash + W.transfer);
-  $("tS").textContent = intf(T.s); $("tV").textContent = intf(T.v); $("tA").textContent = intf(T.s + T.v);
-  $("tC").textContent = naira(T.c); $("tT").textContent = naira(T.t);
   const O = overall(T, W);
+  $("wk_aT").textContent = intf(W.attendance); $("wk_oC").textContent = naira(W.cash); $("wk_oT").textContent = naira(W.transfer);
+  $("tS").textContent = intf(T.s); $("tV").textContent = intf(T.v); $("tA").textContent = intf(O.a);
+  $("tC").textContent = naira(O.c); $("tT").textContent = naira(O.t);
   $("gA").textContent = intf(O.a); $("gC").textContent = naira(O.c); $("gT").textContent = naira(O.t); $("gO").textContent = naira(O.c + O.t);
   if (!dateState.valid) $("totDate").textContent = "";
   const name = $("recorder").value.trim();
@@ -470,18 +454,16 @@ function loadDraft() {
 /* ---------- review modal ---------- */
 function openReview() {
   const { rows, T, W } = collect();
-  $("mWk").innerHTML = `<b>Workers</b> — attendance <b>${intf(W.attendance)}</b> · cash ${naira(W.cash)} · transfer ${naira(W.transfer)}`;
-  $("mwA").textContent = intf(W.attendance); $("mwC").textContent = naira(W.cash); $("mwT").textContent = naira(W.transfer); $("mwO").textContent = naira(W.cash + W.transfer);
+  const O = overall(T, W);
   $("mName").textContent = $("recorder").value.trim();
   $("mDate").textContent = prettyDate(dateState.iso);
-  let body = "", dep = "";
+  let body = `<tr class="dept"><td colspan="3">Workers</td></tr><tr><td>Workers</td><td>Attendance <b style="color:var(--blue)">${intf(W.attendance)}</b></td><td>${naira(W.cash).slice(1)}<small>Transfer ${naira(W.transfer).slice(1)}</small></td></tr>`, dep = "";
   rows.forEach(r => {
     if (r.department !== dep) { dep = r.department; body += `<tr class="dept"><td colspan="3">${esc(dep)}</td></tr>`; }
     body += `<tr><td>${esc(r.cls)}</td><td>${intf(r.students)} + ${intf(r.visitors)} = <b style="color:var(--blue)">${intf(r.total)}</b></td><td>${naira(r.cash).slice(1)}<small>Transfer ${naira(r.transfer).slice(1)}</small></td></tr>`;
   });
   $("mBody").innerHTML = body;
-  $("mFoot").innerHTML = `<tr><td>Classes total</td><td>${intf(T.s)} + ${intf(T.v)} = ${intf(T.s + T.v)}</td><td>${naira(T.c).slice(1)}<small>Transfer ${naira(T.t).slice(1)}</small></td></tr>`;
-  const O = overall(T, W);
+  $("mFoot").innerHTML = `<tr><td>Total (incl. workers)</td><td><b>${intf(O.a)}</b></td><td>${naira(O.c).slice(1)}<small>Transfer ${naira(O.t).slice(1)}</small></td></tr>`;
   $("mA").textContent = intf(O.a); $("mC").textContent = naira(O.c); $("mT").textContent = naira(O.t); $("mO").textContent = naira(O.c + O.t);
   $("modal").classList.add("show");
   $("confirmBtn").disabled = false;
