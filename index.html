@@ -88,6 +88,13 @@
   .grand{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   @media (max-width:640px){.grand{grid-template-columns:1fr 1fr}}
   .g{border-radius:12px;padding:12px;border:1px solid var(--line);background:#fff}
+  .grp{font-size:13px;font-weight:700;color:var(--blue);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .grp::after{content:"";flex:1;height:1px;background:var(--line)}
+  .g.wk{background:#2F7D5B;border-color:#2F7D5B} .g.wk span{color:#CFEBDD} .g.wk b{color:#fff}
+  .wkline{background:#EAF5EF;border:1px solid #CFE6DA;border-radius:10px;padding:10px 12px;margin:0 0 12px;font-size:14px}
+  .wkline b{color:#1F5E43}
+  .cls .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media (max-width:640px){.cls .grid3{grid-template-columns:1fr 1fr}.cls .grid3>div:first-child{grid-column:1 / -1}}
   .g span{display:block;font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
   .g b{display:block;font-size:21px;margin-top:4px;color:var(--ink);word-break:break-word}
   .g.att{background:var(--blue);border-color:var(--blue)} .g.att span{color:#C9C7F2} .g.att b{color:#fff}
@@ -141,7 +148,7 @@
     <img src="data:image/webp;base64,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" alt="">
     <div>
       <h1>Sunday Bible School <em>Register</em></h1>
-      <p>Enter today's figures for every class, check them, then save. Totals update as you type.</p>
+      <p>Enter today's figures for the workers and every class, check them, then save. Totals update as you type.</p>
     </div>
   </section>
 
@@ -186,11 +193,19 @@
           <tfoot><tr><td>Total offering</td><td id="tC">₦0.00</td><td id="tT">₦0.00</td></tr></tfoot>
         </table>
       </div>
-      <div class="grand" style="margin-top:16px">
+      <div class="grp">Bible School</div>
+      <div class="grand">
         <div class="g att"><span>Total attendance</span><b id="gA">0</b></div>
         <div class="g"><span>Offering · cash</span><b id="gC">₦0.00</b></div>
         <div class="g"><span>Offering · transfer</span><b id="gT">₦0.00</b></div>
         <div class="g off"><span>Total offering</span><b id="gO">₦0.00</b></div>
+      </div>
+      <div class="grp">Workers</div>
+      <div class="grand">
+        <div class="g wk"><span>Workers attendance</span><b id="wA">0</b></div>
+        <div class="g"><span>Offering · cash</span><b id="wC">₦0.00</b></div>
+        <div class="g"><span>Offering · transfer</span><b id="wT">₦0.00</b></div>
+        <div class="g wk"><span>Workers offering</span><b id="wO">₦0.00</b></div>
       </div>
     </div>
   </section>
@@ -212,6 +227,7 @@
       <div><span>Recorder</span><b id="mName"></b></div>
       <div><span>Sunday</span><b id="mDate"></b></div>
     </div>
+    <div class="wkline" id="mWk"></div>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Class</th><th>Students + Visitors</th><th>Cash / Transfer (₦)</th></tr></thead>
@@ -219,11 +235,19 @@
         <tfoot id="mFoot"></tfoot>
       </table>
     </div>
-    <div class="grand" style="margin-top:12px">
+    <div class="grp">Bible School</div>
+    <div class="grand">
       <div class="g att"><span>Total attendance</span><b id="mA"></b></div>
       <div class="g"><span>Cash</span><b id="mC"></b></div>
       <div class="g"><span>Transfer</span><b id="mT"></b></div>
       <div class="g off"><span>Total offering</span><b id="mO"></b></div>
+    </div>
+    <div class="grp">Workers</div>
+    <div class="grand">
+      <div class="g wk"><span>Attendance</span><b id="mwA"></b></div>
+      <div class="g"><span>Cash</span><b id="mwC"></b></div>
+      <div class="g"><span>Transfer</span><b id="mwT"></b></div>
+      <div class="g wk"><span>Total offering</span><b id="mwO"></b></div>
     </div>
     <div class="actions">
       <button class="btn secondary" id="backBtn" type="button">Go back &amp; edit</button>
@@ -245,6 +269,11 @@ const DEPARTMENTS = [
   { name: "Children's Department", classes: ["Beginner Class", "Cradle Class", "Primary Class"] },
   { name: "Adult Department",      classes: ["Adult A", "Adult B"] },
   { name: "Youth Department",      classes: ["Youth A", "Youth B", "Youth C", "Intermediate Class"] }
+];
+const WORKER_FIELDS = [
+  { key: "attendance", label: "Attendance", money: false },
+  { key: "cash",       label: "Offering (cash)", money: true },
+  { key: "transfer",   label: "Offering (transfer)", money: true }
 ];
 const FIELDS = [
   { key: "students", label: "Students", money: false },
@@ -278,7 +307,13 @@ const prettyDate = s => { const d = parseISO(s); return d ? d.toLocaleDateString
 /* ---------- build the entry form ---------- */
 const ALL = [];
 (function buildForm() {
-  let html = "", att = "", off = "";
+  let html = `<section class="card"><div class="card-h blue">Workers<small>recorded separately</small></div><div class="card-b"><div class="cls" id="wk"><div class="cls-h"><b>Attendance &amp; offering</b><span id="wk_st">0 of 3 filled</span></div><div class="grid3">`;
+  WORKER_FIELDS.forEach(f => {
+    const inp = `<input id="wk_${f.key}" data-key="${f.key}" type="text" inputmode="${f.money ? "decimal" : "numeric"}" autocomplete="off">`;
+    html += `<div><label for="wk_${f.key}">${f.label}</label>${f.money ? `<div class="money">${inp}</div>` : inp}</div>`;
+  });
+  html += `</div></div></div></section>`;
+  let att = "", off = "";
   DEPARTMENTS.forEach((dep, di) => {
     html += `<section class="card"><div class="card-h ${di % 2 ? "blue" : "red"}">${esc(dep.name)}<small>${dep.classes.length} classes</small></div><div class="card-b">`;
     att += `<tr class="dept"><td colspan="4">${esc(dep.name)}</td></tr>`;
@@ -307,7 +342,7 @@ function readField(el) {
   const raw = el.value.replace(/[,\s₦]/g, "");
   if (raw === "") return { empty: true, ok: false, val: 0 };
   const money = el.dataset.key === "cash" || el.dataset.key === "transfer";
-  const ok = money ? /^\d+(\.\d{1,2})?$/.test(raw) : /^\d+$/.test(raw);
+  const ok = money ? /^\d+(\.\d{1,2})?$/.test(raw) : /^\d+$/.test(raw); // counts: whole numbers
   return { empty: false, ok, val: ok ? Number(raw) : 0 };
 }
 function collect() {
@@ -333,7 +368,16 @@ function collect() {
     $(`${r.id}_oT`).textContent = naira(row.transfer);
   });
   T.c = Math.round(T.c * 100) / 100; T.t = Math.round(T.t * 100) / 100;
-  return { rows, T, missing, invalid };
+  const W = {}; let wf = 0;
+  WORKER_FIELDS.forEach(f => {
+    const el = $(`wk_${f.key}`), x = readField(el);
+    el.classList.toggle("bad", !x.empty && !x.ok);
+    if (x.empty) missing++; else if (!x.ok) invalid++; else wf++;
+    W[f.key] = x.val;
+  });
+  $("wk").classList.toggle("done", wf === 3);
+  $("wk_st").textContent = wf === 3 ? "✓ Complete" : `${wf} of 3 filled`;
+  return { rows, T, W, missing, invalid };
 }
 
 /* ---------- date / duplicate checks ---------- */
@@ -383,7 +427,8 @@ function setHint(el, text, cls) { el.textContent = text; el.className = "hint" +
 let last = null;
 function refresh() {
   last = collect();
-  const { T, missing, invalid } = last;
+  const { T, W, missing, invalid } = last;
+  $("wA").textContent = intf(W.attendance); $("wC").textContent = naira(W.cash); $("wT").textContent = naira(W.transfer); $("wO").textContent = naira(W.cash + W.transfer);
   $("tS").textContent = intf(T.s); $("tV").textContent = intf(T.v); $("tA").textContent = intf(T.s + T.v);
   $("tC").textContent = naira(T.c); $("tT").textContent = naira(T.t);
   $("gA").textContent = intf(T.s + T.v); $("gC").textContent = naira(T.c); $("gT").textContent = naira(T.t); $("gO").textContent = naira(T.c + T.t);
@@ -395,7 +440,7 @@ function refresh() {
   else if (!dateState.valid) why = dateState.msg || "Check the date.";
   else if (dateState.checking) why = "Checking the date…";
   else if (invalid) why = `${invalid} box${invalid > 1 ? "es have" : " has"} an invalid number (highlighted in red).`;
-  else if (missing) why = `${missing} box${missing > 1 ? "es" : ""} still empty — enter 0 where there is nothing.`;
+  else if (missing) why = `${missing} box${missing > 1 ? "es" : ""} still empty (workers and classes) — enter 0 where there is nothing.`;
   $("why").textContent = why || "All set — review your figures and save.";
   $("why").style.color = why ? "" : "var(--ok)";
   $("reviewBtn").disabled = !!why;
@@ -405,6 +450,7 @@ function refresh() {
 /* draft: keep typed figures if the page is closed by accident */
 function saveDraft() {
   const vals = {}; ALL.forEach(r => FIELDS.forEach(f => { const v = $(`${r.id}_${f.key}`).value; if (v !== "") vals[`${r.id}_${f.key}`] = v; }));
+  WORKER_FIELDS.forEach(f => { const v = $(`wk_${f.key}`).value; if (v !== "") vals[`wk_${f.key}`] = v; });
   store.set(K.draft, { date: $("svcDate").value, vals });
 }
 function loadDraft() {
@@ -416,7 +462,9 @@ function loadDraft() {
 
 /* ---------- review modal ---------- */
 function openReview() {
-  const { rows, T } = collect();
+  const { rows, T, W } = collect();
+  $("mWk").innerHTML = `<b>Workers</b> — attendance <b>${intf(W.attendance)}</b> · cash ${naira(W.cash)} · transfer ${naira(W.transfer)}`;
+  $("mwA").textContent = intf(W.attendance); $("mwC").textContent = naira(W.cash); $("mwT").textContent = naira(W.transfer); $("mwO").textContent = naira(W.cash + W.transfer);
   $("mName").textContent = $("recorder").value.trim();
   $("mDate").textContent = prettyDate(dateState.iso);
   let body = "", dep = "";
@@ -434,8 +482,10 @@ function closeReview() { $("modal").classList.remove("show"); }
 
 async function confirmSave() {
   $("confirmBtn").disabled = true;
-  const { rows } = collect();
+  const { rows, W } = collect();
   const entry = {
+    version: 2,
+    workers: { attendance: W.attendance, cash: W.cash, transfer: W.transfer },
     id: (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(16).slice(2)),
     date: dateState.iso,
     recorder: $("recorder").value.trim(),
@@ -453,6 +503,7 @@ async function confirmSave() {
 }
 function clearFigures() {
   ALL.forEach(r => FIELDS.forEach(f => { $(`${r.id}_${f.key}`).value = ""; }));
+  WORKER_FIELDS.forEach(f => { $(`wk_${f.key}`).value = ""; });
   $("svcDate").value = "";
   store.set(K.draft, null);
   checkDate();
@@ -528,7 +579,7 @@ if (!loadDraft()) $("svcDate").value = lastSundayISO();
 $("svcDate").addEventListener("change", checkDate);
 $("entry").addEventListener("input", e => {
   if (e.target.matches("input")) {
-    if (e.target.dataset.key === "students" || e.target.dataset.key === "visitors") e.target.value = e.target.value.replace(/[^\d]/g, "");
+    if (["students", "visitors", "attendance"].includes(e.target.dataset.key)) e.target.value = e.target.value.replace(/[^\d]/g, "");
     else e.target.value = e.target.value.replace(/[^\d.,]/g, "");
     refresh();
   }
