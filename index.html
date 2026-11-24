@@ -183,22 +183,15 @@
         <table>
           <thead><tr><th>Attendance</th><th>Students</th><th>Visitors</th><th>Total</th></tr></thead>
           <tbody id="attBody"></tbody>
-          <tfoot><tr><td>Total attendance</td><td id="tS">0</td><td id="tV">0</td><td id="tA">0</td></tr></tfoot>
+          <tfoot><tr><td>Classes total</td><td id="tS">0</td><td id="tV">0</td><td id="tA">0</td></tr></tfoot>
         </table>
       </div>
       <div class="tbl-wrap" style="margin-top:16px">
         <table>
           <thead><tr><th>Offering</th><th>Cash (₦)</th><th>Transfer (₦)</th></tr></thead>
           <tbody id="offBody"></tbody>
-          <tfoot><tr><td>Total offering</td><td id="tC">₦0.00</td><td id="tT">₦0.00</td></tr></tfoot>
+          <tfoot><tr><td>Classes total</td><td id="tC">₦0.00</td><td id="tT">₦0.00</td></tr></tfoot>
         </table>
-      </div>
-      <div class="grp">Bible School</div>
-      <div class="grand">
-        <div class="g att"><span>Total attendance</span><b id="gA">0</b></div>
-        <div class="g"><span>Offering · cash</span><b id="gC">₦0.00</b></div>
-        <div class="g"><span>Offering · transfer</span><b id="gT">₦0.00</b></div>
-        <div class="g off"><span>Total offering</span><b id="gO">₦0.00</b></div>
       </div>
       <div class="grp">Workers</div>
       <div class="grand">
@@ -206,6 +199,13 @@
         <div class="g"><span>Offering · cash</span><b id="wC">₦0.00</b></div>
         <div class="g"><span>Offering · transfer</span><b id="wT">₦0.00</b></div>
         <div class="g wk"><span>Workers offering</span><b id="wO">₦0.00</b></div>
+      </div>
+      <div class="grp">Overall total (classes + workers)</div>
+      <div class="grand">
+        <div class="g att"><span>Total attendance</span><b id="gA">0</b></div>
+        <div class="g"><span>Offering · cash</span><b id="gC">₦0.00</b></div>
+        <div class="g"><span>Offering · transfer</span><b id="gT">₦0.00</b></div>
+        <div class="g off"><span>Total offering</span><b id="gO">₦0.00</b></div>
       </div>
     </div>
   </section>
@@ -235,19 +235,19 @@
         <tfoot id="mFoot"></tfoot>
       </table>
     </div>
-    <div class="grp">Bible School</div>
-    <div class="grand">
-      <div class="g att"><span>Total attendance</span><b id="mA"></b></div>
-      <div class="g"><span>Cash</span><b id="mC"></b></div>
-      <div class="g"><span>Transfer</span><b id="mT"></b></div>
-      <div class="g off"><span>Total offering</span><b id="mO"></b></div>
-    </div>
     <div class="grp">Workers</div>
     <div class="grand">
       <div class="g wk"><span>Attendance</span><b id="mwA"></b></div>
       <div class="g"><span>Cash</span><b id="mwC"></b></div>
       <div class="g"><span>Transfer</span><b id="mwT"></b></div>
       <div class="g wk"><span>Total offering</span><b id="mwO"></b></div>
+    </div>
+    <div class="grp">Overall total (classes + workers)</div>
+    <div class="grand">
+      <div class="g att"><span>Total attendance</span><b id="mA"></b></div>
+      <div class="g"><span>Cash</span><b id="mC"></b></div>
+      <div class="g"><span>Transfer</span><b id="mT"></b></div>
+      <div class="g off"><span>Total offering</span><b id="mO"></b></div>
     </div>
     <div class="actions">
       <button class="btn secondary" id="backBtn" type="button">Go back &amp; edit</button>
@@ -380,6 +380,12 @@ function collect() {
   return { rows, T, W, missing, invalid };
 }
 
+/* overall = all classes + workers */
+function overall(T, W) {
+  const r2 = n => Math.round(n * 100) / 100;
+  return { a: T.s + T.v + W.attendance, c: r2(T.c + W.cash), t: r2(T.t + W.transfer) };
+}
+
 /* ---------- date / duplicate checks ---------- */
 let dateState = { iso: "", valid: false, msg: "", checking: false, exists: false };
 let checkSeq = 0;
@@ -431,7 +437,8 @@ function refresh() {
   $("wA").textContent = intf(W.attendance); $("wC").textContent = naira(W.cash); $("wT").textContent = naira(W.transfer); $("wO").textContent = naira(W.cash + W.transfer);
   $("tS").textContent = intf(T.s); $("tV").textContent = intf(T.v); $("tA").textContent = intf(T.s + T.v);
   $("tC").textContent = naira(T.c); $("tT").textContent = naira(T.t);
-  $("gA").textContent = intf(T.s + T.v); $("gC").textContent = naira(T.c); $("gT").textContent = naira(T.t); $("gO").textContent = naira(T.c + T.t);
+  const O = overall(T, W);
+  $("gA").textContent = intf(O.a); $("gC").textContent = naira(O.c); $("gT").textContent = naira(O.t); $("gO").textContent = naira(O.c + O.t);
   if (!dateState.valid) $("totDate").textContent = "";
   const name = $("recorder").value.trim();
   let why = "";
@@ -473,8 +480,9 @@ function openReview() {
     body += `<tr><td>${esc(r.cls)}</td><td>${intf(r.students)} + ${intf(r.visitors)} = <b style="color:var(--blue)">${intf(r.total)}</b></td><td>${naira(r.cash).slice(1)}<small>Transfer ${naira(r.transfer).slice(1)}</small></td></tr>`;
   });
   $("mBody").innerHTML = body;
-  $("mFoot").innerHTML = `<tr><td>Total</td><td>${intf(T.s)} + ${intf(T.v)} = ${intf(T.s + T.v)}</td><td>${naira(T.c).slice(1)}<small>Transfer ${naira(T.t).slice(1)}</small></td></tr>`;
-  $("mA").textContent = intf(T.s + T.v); $("mC").textContent = naira(T.c); $("mT").textContent = naira(T.t); $("mO").textContent = naira(T.c + T.t);
+  $("mFoot").innerHTML = `<tr><td>Classes total</td><td>${intf(T.s)} + ${intf(T.v)} = ${intf(T.s + T.v)}</td><td>${naira(T.c).slice(1)}<small>Transfer ${naira(T.t).slice(1)}</small></td></tr>`;
+  const O = overall(T, W);
+  $("mA").textContent = intf(O.a); $("mC").textContent = naira(O.c); $("mT").textContent = naira(O.t); $("mO").textContent = naira(O.c + O.t);
   $("modal").classList.add("show");
   $("confirmBtn").disabled = false;
 }
